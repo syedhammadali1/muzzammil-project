@@ -303,19 +303,67 @@ function scrollToSection(sectionId) {
    ======================================== */
 
 /**
- * Initialize hero image slider
+ * Initialize hero image slider with manual controls
  */
 function initializeHeroSlider() {
     const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
     let currentSlide = 0;
+    let autoPlayInterval = null;
     
-    if (slides.length > 0) {
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
+    if (slides.length === 0) return;
+    
+    // Function to show specific slide
+    function showSlide(index) {
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Add active class to current slide and dot
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        
+        currentSlide = index;
+    }
+    
+    // Function to go to next slide
+    function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+    }
+    
+    // Auto-play functionality
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(() => {
+            nextSlide();
         }, 5000);
     }
+    
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+    }
+    
+    // Event listeners for dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            stopAutoPlay();
+            startAutoPlay(); // Restart auto-play after manual navigation
+        });
+    });
+    
+    // Pause auto-play on hover
+    const heroSlider = document.querySelector('.hero-slider');
+    if (heroSlider) {
+        heroSlider.addEventListener('mouseenter', stopAutoPlay);
+        heroSlider.addEventListener('mouseleave', startAutoPlay);
+    }
+    
+    // Start auto-play
+    startAutoPlay();
 }
 
 /* ========================================
