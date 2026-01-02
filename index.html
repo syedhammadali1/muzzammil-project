@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolsInfo - Find Your Perfect School</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Leaflet CSS for fallback map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Header Section with Navigation -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>SchoolsInfo</span>
+            </div>
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active" data-section="home">Home</a>
+                <a href="#schools" class="nav-link" data-section="schools">Schools</a>
+                <a href="#search" class="nav-link" data-section="search">Search</a>
+                <a href="#sitemap" class="nav-link" data-section="sitemap">Site Map</a>
+                <a href="#favourites" class="nav-link" data-section="favourites">Favourites</a>
+                <a href="#compare" class="nav-link" data-section="compare">Compare</a>
+                <a href="#feedback" class="nav-link" data-section="feedback">Feedback</a>
+                <a href="#about" class="nav-link" data-section="about">About</a>
+            </nav>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-slider">
+                <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200');"></div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200');"></div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200');"></div>
+            </div>
+            <div class="hero-content">
+                <h1>Welcome to SchoolsInfo</h1>
+                <p class="hero-subtitle">Your comprehensive guide to finding the perfect school for your child</p>
+                <p class="hero-description">
+                    SchoolsInfo helps parents discover and compare schools in your city. 
+                    Search by location, facilities, sports, and admission availability. 
+                    Make informed decisions with detailed information and interactive maps.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('schools')">Explore Schools</button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('search')">Search Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <i class="fas fa-school"></i>
+                <div class="stat-number" id="totalSchools">6</div>
+                <div class="stat-label">Schools Listed</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="stat-number" id="totalLocations">5</div>
+                <div class="stat-label">Locations</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Students Capacity</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schools List Section -->
+    <section id="schools" class="section">
+        <div class="container">
+            <h2 class="section-title">All Schools</h2>
+            <div class="section-description">Browse through all available schools in the city</div>
+            
+            <!-- Admission Status Legend -->
+            <div class="status-legend">
+                <h3>Admission Status Legend</h3>
+                <div class="legend-items">
+                    <span class="legend-item available"><i class="fas fa-check-circle"></i> Seats Available</span>
+                    <span class="legend-item limited"><i class="fas fa-exclamation-circle"></i> Limited Seats</span>
+                    <span class="legend-item full"><i class="fas fa-times-circle"></i> Fully Booked</span>
+                </div>
+            </div>
+
+            <div class="schools-grid" id="schoolsGrid">
+                <!-- Schools will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Schools Section -->
+    <section id="search" class="section">
+        <div class="container">
+            <h2 class="section-title">Search Schools</h2>
+            <div class="section-description">Filter schools based on your preferences</div>
+            
+            <div class="search-container">
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label for="locationFilter">Location/Area:</label>
+                        <select id="locationFilter" class="filter-input">
+                            <option value="">All Locations</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Facilities:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="libraryFilter" class="filter-checkbox">
+                                <span>Library</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="canteenFilter" class="filter-checkbox">
+                                <span>Canteen</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="boardingFilter" class="filter-checkbox">
+                                <span>Boarding</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sportsFilter">Sports:</label>
+                        <select id="sportsFilter" class="filter-input">
+                            <option value="">All Sports</option>
+                            <option value="Football">Football</option>
+                            <option value="Basketball">Basketball</option>
+                            <option value="Cricket">Cricket</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Tennis">Tennis</option>
+                            <option value="Athletics">Athletics</option>
+                            <option value="Volleyball">Volleyball</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="admissionFilter">Admission Status:</label>
+                        <select id="admissionFilter" class="filter-input">
+                            <option value="">All Status</option>
+                            <option value="Available">Available</option>
+                            <option value="Limited">Limited</option>
+                            <option value="Full">Full</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="btn btn-primary" onclick="filterSchools()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetFilters()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-results">
+                    <div class="results-header">
+                        <h3>Search Results</h3>
+                        <span class="results-count" id="resultsCount">0 schools found</span>
+                    </div>
+                    <div class="schools-grid" id="searchResults">
+                        <!-- Search results will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Site Map Section -->
+    <section id="sitemap" class="section">
+        <div class="container">
+            <h2 class="section-title">Site Map - Schools Location</h2>
+            <div class="section-description">View all schools on an interactive map. Click on markers or list items for details.</div>
+            
+            <!-- Map Container -->
+            <div id="map" class="map-container"></div>
+            
+            <!-- Map Legend & School List -->
+            <div class="map-legend-container">
+                <div class="map-legend">
+                    <h3>School Locations</h3>
+                    <ul id="mapLegend">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+                <div class="location-info">
+                    <p><i class="fas fa-info-circle"></i> Click on any school in the list to locate it on the map</p>
+                    <button class="btn btn-secondary" onclick="getUserLocation()">
+                        <i class="fas fa-crosshairs"></i> Show My Location
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favourites Section -->
+    <section id="favourites" class="section">
+        <div class="container">
+            <h2 class="section-title">My Favourite Schools</h2>
+            <div class="section-description">Schools you have marked as favourites (saved in browser)</div>
+            
+            <div id="favouritesContent">
+                <div class="schools-grid" id="favouritesGrid">
+                    <!-- Favourites will be populated by JavaScript -->
+                </div>
+                <div id="noFavourites" class="empty-state">
+                    <i class="fas fa-heart"></i>
+                    <h3>No Favourite Schools Yet</h3>
+                    <p>Add schools to your favourites by clicking the star icon on any school card</p>
+                    <button class="btn btn-primary" onclick="scrollToSection('schools')">Browse Schools</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compare Schools Section -->
+    <section id="compare" class="section">
+        <div class="container">
+            <h2 class="section-title">Compare Schools</h2>
+            <div class="section-description">Select up to 2 schools to compare side by side</div>
+            
+            <div id="compareContent">
+                <div id="compareSelection" class="compare-selection">
+                    <div class="selected-schools">
+                        <div class="selected-school" id="selectedSchool1">
+                            <span class="school-name">No school selected</span>
+                            <button class="btn-remove" onclick="removeFromCompare(1)" style="display:none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="selected-school" id="selectedSchool2">
+                            <span class="school-name">No school selected</span>
+                            <button class="btn-remove" onclick="removeFromCompare(2)" style="display:none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="clearComparison()" id="clearCompareBtn" style="display:none;">
+                        <i class="fas fa-times"></i> Clear Comparison
+                    </button>
+                </div>
+                
+                <div id="compareMessage" class="info-message">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Select schools from the "Schools" section using the compare checkbox, or click "Compare" button on school cards.</p>
+                    <p><strong>Note:</strong> You can compare a maximum of 2 schools at a time.</p>
+                </div>
+                
+                <div id="compareTable" class="compare-table-container" style="display:none;">
+                    <!-- Comparison table will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="section">
+        <div class="container">
+            <h2 class="section-title">Feedback & Ratings</h2>
+            <div class="section-description">Share your experience and view community feedback</div>
+            
+            <div class="feedback-container">
+                <!-- Rating Form -->
+                <div class="feedback-form">
+                    <h3>Rate SchoolsInfo</h3>
+                    <div class="rating-input">
+                        <label>Your Rating:</label>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                            <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                        </div>
+                        <span class="rating-text" id="ratingText">Click to rate</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedbackComment">Your Comment:</label>
+                        <textarea id="feedbackComment" class="form-input" rows="4" placeholder="Share your thoughts about SchoolsInfo..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="submitFeedback()">
+                        <i class="fas fa-paper-plane"></i> Submit Feedback
+                    </button>
+                    <p class="form-note"><i class="fas fa-info-circle"></i> This is a demo. Feedback is stored in browser memory only.</p>
+                </div>
+                
+                <!-- Sample Comments -->
+                <div class="feedback-comments">
+                    <h3>Community Feedback</h3>
+                    <div id="feedbackList">
+                        <!-- Sample comments will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About SchoolsInfo</h2>
+            <div class="about-content">
+                <div class="about-section">
+                    <h3>Our Mission</h3>
+                    <p>
+                        SchoolsInfo is a comprehensive platform designed to help parents and guardians find the perfect 
+                        school for their children. We understand that choosing the right school is one of the most 
+                        important decisions you'll make for your child's future.
+                    </p>
+                </div>
+                
+                <div class="about-section">
+                    <h3>Features</h3>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i> Browse comprehensive school listings with detailed information</li>
+                        <li><i class="fas fa-check-circle"></i> Advanced search filters by location, facilities, and sports</li>
+                        <li><i class="fas fa-check-circle"></i> Interactive map with school locations</li>
+                        <li><i class="fas fa-check-circle"></i> Compare up to 2 schools side by side</li>
+                        <li><i class="fas fa-check-circle"></i> Save favourite schools for quick access</li>
+                        <li><i class="fas fa-check-circle"></i> Real-time admission availability status</li>
+                        <li><i class="fas fa-check-circle"></i> Download detailed school information documents</li>
+                        <li><i class="fas fa-check-circle"></i> Community feedback and ratings</li>
+                    </ul>
+                </div>
+                
+                <div class="about-section">
+                    <h3>School Information</h3>
+                    <p>
+                        Each school listing includes comprehensive details such as maximum intake capacity, 
+                        facility availability (library, canteen, boarding), sports options, admission status, 
+                        and downloadable detailed documents. All information is regularly updated to ensure accuracy.
+                    </p>
+                </div>
+                
+                <div class="about-section">
+                    <h3>Technology</h3>
+                    <p>
+                        Built with modern web technologies including HTML5, CSS3, and JavaScript. 
+                        The platform uses Google Maps API for interactive mapping and browser LocalStorage 
+                        for saving user preferences. The application is fully responsive and works seamlessly 
+                        across all major browsers and devices.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- School Details Modal -->
+    <div id="schoolModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSchoolModal()">&times;</span>
+            <div id="modalBody">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SchoolsInfo</h4>
+                    <p>Your trusted guide to finding the perfect school</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#schools">Schools</a></li>
+                        <li><a href="#search">Search</a></li>
+                        <li><a href="#sitemap">Site Map</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#favourites">Favourites</a></li>
+                        <li><a href="#compare">Compare Schools</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SchoolsInfo. All rights reserved. | Developed for Academic Project</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Support Chat Widget -->
+    <div id="chatWidget" class="chat-widget">
+        <!-- Chat Launcher Button -->
+        <button id="chatLauncher" class="chat-launcher" aria-label="Open Support Chat" title="Need Help?">
+            <span class="chat-icon">💬</span>
+            <span class="chat-badge" id="chatBadge" style="display: none;">1</span>
+        </button>
+
+        <!-- Chat Popup Panel -->
+        <div id="chatPanel" class="chat-panel" style="display: none;">
+            <!-- Chat Header (Draggable) -->
+            <div id="chatHeader" class="chat-header" draggable="false">
+                <div class="chat-header-info">
+                    <div class="chat-header-title">
+                        <span class="chat-status-dot"></span>
+                        Support Team
+                    </div>
+                    <div class="chat-header-subtitle">We're here to help</div>
+                </div>
+                <div class="chat-header-actions">
+                    <button id="chatMinimize" class="chat-btn-minimize" aria-label="Minimize Chat" title="Minimize">
+                        <span>−</span>
+                    </button>
+                    <button id="chatClose" class="chat-btn-close" aria-label="Close Chat" title="Close">
+                        <span>×</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Body -->
+            <div id="chatBody" class="chat-body">
+                <!-- Welcome Message -->
+                <div class="chat-message chat-bot">
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-bubble chat-bubble-bot">
+                        <div class="chat-text">Hi 👋 How can we help you today?</div>
+                        <div class="chat-time"></div>
+                    </div>
+                </div>
+
+                <!-- FAQ Questions -->
+                <div id="faqContainer" class="chat-faq-container">
+                    <!-- FAQ buttons will be inserted here by JavaScript -->
+                </div>
+
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="chat-messages">
+                    <!-- Messages will be inserted here -->
+                </div>
+
+                <!-- Typing Indicator -->
+                <div id="typingIndicator" class="chat-typing-indicator" style="display: none;">
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <!-- Human Support Options -->
+                <div id="humanSupportContainer" class="chat-human-support" style="display: none;">
+                    <div class="chat-human-options">
+                        <a href="tel:+923001234567" class="chat-support-btn">
+                            <span>📞</span> Call Support
+                        </a>
+                        <a href="mailto:support@schoolsinfo.com" class="chat-support-btn">
+                            <span>✉️</span> Email Support
+                        </a>
+                        <button id="chatScrollToContact" class="chat-support-btn">
+                            <span>📝</span> Support Form
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Footer -->
+            <div class="chat-footer">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type a message... (Demo)" disabled>
+                <button id="chatSend" class="chat-send-btn" aria-label="Send Message" disabled>
+                    <span>➤</span>
+                </button>
+            </div>
+
+            <!-- Resize Handle -->
+            <div class="chat-resize-handle" id="chatResizeHandle"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initGoogleMap" async defer onerror="initLeafletMap()"></script>
+    <!-- Leaflet for fallback -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Main JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>
